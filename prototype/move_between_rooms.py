@@ -1,22 +1,50 @@
-"""Module Six Milestone starter for the simplified movement prototype."""
+"""Module Six Milestone: Moving Between Rooms Prototype.
+Adapted for Kyle Gaston's Sand Rail Bounty Hill Game World.
+"""
 
-# A dictionary for the simplified dragon text game.
-# The dictionary links a room to other rooms.
+# A dictionary mapping rooms to adjacent rooms for movement.
+# Built using the 8 rooms designed in Project One.
 rooms = {
-    "Great Hall": {"south": "Bedroom"},
-    "Bedroom": {"north": "Great Hall", "east": "Cellar"},
-    "Cellar": {"west": "Bedroom"},
+    "Main Garage": {"east": "Parts Storage Room", "west": "Fab Shop / Welding Bay", "south": "Pit Lane"},
+    "Parts Storage Room": {"west": "Main Garage", "west": "Trailer Staging"}, # Matches project map connections
+    "Fab Shop / Welding Bay": {"east": "Main Garage"},
+    "Tool Shed": {"south": "Fab Shop / Welding Bay"}, # Connected via Fab Shop per map layout
+    "Pit Lane": {"north": "Main Garage", "south": "Trailer Staging"},
+    "Trailer Staging": {"north": "Pit Lane", "east": "Parts Storage Room", "west": "Overflow Yard"},
+    "Overflow Yard": {"east": "Trailer Staging", "north": "Starting Line"},
+    "Starting Line": {"south": "Overflow Yard"}
 }
 
+# Set the player's starting room
+current_room = "Main Garage"
 
-# TODO: Set the player's starting room for the simplified prototype.
+print("Welcome to the Sand Rail Bounty Hill Challenge!")
+print("Move commands: go north, go south, go east, go west, or exit")
+print("-" * 50)
 
-# TODO: Create the gameplay loop required by the milestone.
-# Within the loop, complete the required behavior in small steps:
-#   1. Display the current room.
-#   2. Prompt for a movement command or "exit".
-#   3. Branch for a valid move, exit, or invalid input.
-#   4. Update the room only after a valid movement command.
-#   5. Continue until the required exit condition is reached.
+# Create the gameplay loop
+while current_room != "exit":
+    # Display the current room
+    print(f"\nYou are currently in the: {current_room}")
 
-# TODO: Run and debug all milestone cases in prototype/README.md.
+    # Prompt for a movement command or exit
+    command = input("Enter your move: ").strip().lower()
+
+    # Handle exit command
+    if command == "exit":
+        current_room = "exit"
+        print("Exiting game. Good luck at the Bounty Hill!")
+
+    # Branch for a valid movement command (e.g., 'go north')
+    elif command.startswith("go "):
+        direction = command.split(" ")[1]
+
+        # Validate movement using the rooms dictionary
+        if direction in rooms[current_room]:
+            current_room = rooms[current_room][direction]
+        else:
+            print("You can't go that way! Choose a valid direction.")
+
+    # Input validation for invalid commands
+    else:
+        print("Invalid command! Please type 'go [direction]' (e.g., go north) or 'exit'.")
